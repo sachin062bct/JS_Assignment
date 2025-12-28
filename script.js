@@ -1,74 +1,55 @@
-const quadrants = document.querySelectorAll('.quadrant');
+document.body.style.margin = "0";
+document.body.style.display = "grid";
+document.body.style.gridTemplateColumns = "1fr 1fr";
+document.body.style.gridTemplateColumns = "1fr 1fr";
+document.body.style.height = "100vh";
+document.body.style.gap = "10px";           
+document.body.style.padding = "10px";       
+document.body.style.backgroundColor = "white"; 
 
-const quadrantSettings = {
-    Q1: { color: '#FF00FF', cursor: 'crosshair' },
-    Q2: { color: '#00FFFF', cursor: 'grab' },
-    Q3: { color: '#FFFF00', cursor: 'pointer' },
-    Q4: { color: '#FF00AA', cursor: 'move' }
-};
+const cursors = [
+  { type: "pointer", color: "#FF00FF", label: "Q1" },
+  { type: "wait", color: "#00FFFF", label: "Q2" },
+  { type: "help", color: "#FFFF00", label: "Q3" },
+  { type: "no-drop", color: "#FE019A", label: "Q4" }
+];
 
-quadrants.forEach(function(quad) {
-    const heading = quad.querySelector('h2');
-    const paragraph = quad.querySelector('p');
-    heading.style.opacity = '0';
-    paragraph.style.opacity = '0';
-});
+cursors.forEach(({ type, color, label }) => {
+    const div = document.createElement("div");
+    div.className = "container";
+    div.style.borderRadius = "20px"; 
 
+    const text = document.createElement("span");
+    div.appendChild(text);
 
-function activateQuadrant(targetElement) {
-    
-    for (let i = 0; i < quadrants.length; i++) {
-        const q = quadrants[i];
-        q.style.background = 'white';
-        q.classList.remove('active');
-        
+    div.style.display = "flex";
+    div.style.justifyContent = "center";
+    div.style.alignItems = "center";
+    div.style.backgroundColor = "white";
+    text.style.opacity = "0";
+    text.style.transform = "translateY(10px)";
+    text.style.fontSize = "50px";
 
-        const h2Element = q.querySelector('h2');
-        const pElement = q.querySelector('p');
-        h2Element.style.opacity = '0';
-        pElement.style.opacity = '0';
-        pElement.textContent = '';
-    }
+    div.style.transition = "background-color 1s ease, border 0.3s ease";
+    text.style.transition = "opacity 0.3s ease, transform 0.3s ease";
 
-   
-    const quadId = targetElement.id;
-    const settings = quadrantSettings[quadId];
-    
-    const titleElement = targetElement.querySelector('h2');
-    const labelElement = targetElement.querySelector('p');
-
-    titleElement.style.opacity = '1';
-    titleElement.style.color = 'white';
-    labelElement.style.opacity = '1';
-    labelElement.style.color = 'white';
-    
-    targetElement.style.background = settings.color;
-    targetElement.style.cursor = settings.cursor;
-    
-    targetElement.classList.add('active');
-}
-
-function resetAllQuadrants() {
-    quadrants.forEach(function(q) {
-        q.style.background = 'white'; 
-        q.style.cursor = 'default';   
-        q.classList.remove('active');
-        
-        const h2Element = q.querySelector('h2');
-        const pElement = q.querySelector('p');
-        h2Element.style.opacity = '0';
-        pElement.style.opacity = '0';
-        pElement.textContent = '';
+    div.addEventListener("mouseover", function(){
+        div.style.cursor = type;
+        div.style.backgroundColor = color;
+        text.textContent = label;
+        div.style.border = "CREAMYWHITE 5px solid";
+        text.style.opacity = "1";
+        text.style.transform = "translateY(0px)";
     });
-}
+    
+    div.addEventListener("mouseout", function(){
+        div.style.backgroundColor = "white";
+        div.style.border = "none";
+        text.style.opacity = "0";
+        text.style.transform = "translateY(40px)";
+    });
 
-quadrants.forEach(function(quadrant) {
-    quadrant.addEventListener('mouseenter', function() {
-        activateQuadrant(quadrant);
-    });
-    quadrant.addEventListener('mouseleave', function() {
-        resetAllQuadrants();
-    });
+    document.body.appendChild(div);
 });
 
 
