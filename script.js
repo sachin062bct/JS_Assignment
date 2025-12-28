@@ -1,65 +1,75 @@
 const quadrants = document.querySelectorAll('.quadrant');
 
-const config = {
+const quadrantSettings = {
     Q1: { color: '#FF00FF', cursor: 'crosshair' },
     Q2: { color: '#00FFFF', cursor: 'grab' },
     Q3: { color: '#FFFF00', cursor: 'pointer' },
     Q4: { color: '#FF00AA', cursor: 'move' }
 };
 
-quadrants.forEach(q => {
-    q.querySelector('h2').style.opacity = '0';
-    q.querySelector('p').style.opacity = '0';
+quadrants.forEach(function(quad) {
+    const heading = quad.querySelector('h2');
+    const paragraph = quad.querySelector('p');
+    heading.style.opacity = '0';
+    paragraph.style.opacity = '0';
 });
 
-quadrants.forEach(q => {
-    q.querySelector('h2').style.opacity = '0';
-    q.querySelector('p').style.opacity = '0';
-});
 
-function activate(target) {
+function activateQuadrant(targetElement) {
     
-    quadrants.forEach(q => {
+    for (let i = 0; i < quadrants.length; i++) {
+        const q = quadrants[i];
         q.style.background = 'white';
         q.classList.remove('active');
-        q.querySelector('h2').style.opacity = '0';
-        q.querySelector('p').style.opacity = '0';
-        q.querySelector('h2').style.opacity = '0';
-        q.querySelector('p').style.opacity = '0';
-        q.querySelector('p').textContent = '';
-    });
+        
 
-    
-    
-    const settings = config[target.id];
-    const title = target.querySelector('h2');
-    const label = target.querySelector('p');
-    title.style.opacity = '1';
-    label.style.opacity = '1';
-    title.style.color = 'white';
-    label.style.color = 'white';
+        const h2Element = q.querySelector('h2');
+        const pElement = q.querySelector('p');
+        h2Element.style.opacity = '0';
+        pElement.style.opacity = '0';
+        pElement.textContent = '';
+    }
 
-    title.style.opacity = '1';
-    title.style.color = 'white';
-    label.style.opacity = '1';
-    label.style.color = 'white';
-    target.style.background = settings.color;
-    target.style.cursor = settings.cursor;
+   
+    const quadId = targetElement.id;
+    const settings = quadrantSettings[quadId];
     
-    target.classList.add('active');
+    const titleElement = targetElement.querySelector('h2');
+    const labelElement = targetElement.querySelector('p');
+
+    titleElement.style.opacity = '1';
+    titleElement.style.color = 'white';
+    labelElement.style.opacity = '1';
+    labelElement.style.color = 'white';
+    
+    targetElement.style.background = settings.color;
+    targetElement.style.cursor = settings.cursor;
+    
+    targetElement.classList.add('active');
 }
 
-quadrants.forEach(q => {
-    q.onmouseenter = () => activate(q);
-});
-document.querySelector('.container').onmouseleave = () => {
-    quadrants.forEach(q => {
-        q.style.background = 'white';
+function resetAllQuadrants() {
+    quadrants.forEach(function(q) {
+        q.style.background = 'white'; 
+        q.style.cursor = 'default';   
         q.classList.remove('active');
-        q.querySelector('h2').style.opacity = '0';
-        q.querySelector('p').style.opacity = '0';
+        
+        const h2Element = q.querySelector('h2');
+        const pElement = q.querySelector('p');
+        h2Element.style.opacity = '0';
+        pElement.style.opacity = '0';
+        pElement.textContent = '';
     });
-};
+}
+
+quadrants.forEach(function(quadrant) {
+    quadrant.addEventListener('mouseenter', function() {
+        activateQuadrant(quadrant);
+    });
+    quadrant.addEventListener('mouseleave', function() {
+        resetAllQuadrants();
+    });
+});
 
 
 
